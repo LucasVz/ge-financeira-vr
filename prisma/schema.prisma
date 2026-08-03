@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String
+  services Service[]
+
+  @@map("categories")
+}
+
+model Service {
+  id         Int      @id @default(autoincrement())
+  name       String
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  incomes    Income[]
+
+  @@map("services")
+}
+
+model PaymentMethod {
+  id      Int      @id @default(autoincrement())
+  name    String
+  incomes Income[]
+
+  @@map("payment_methods")
+}
+
+model Income {
+  id               Int      @id @default(autoincrement())
+  serviceId        Int
+  paymentMethodId  Int
+  amount           Decimal
+  installments     Int
+  attendanceType   String
+  registrationDate DateTime @default(now())
+
+  // Relations
+  service       Service       @relation(fields: [serviceId], references: [id])
+  paymentMethod PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+
+  @@map("incomes")
+}
+
+model Expense {
+  id               Int      @id @default(autoincrement())
+  description      String
+  amount           Decimal
+  expenseType      String
+  registrationDate DateTime @default(now())
+
+  @@map("expenses")
+}
