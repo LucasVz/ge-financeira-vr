@@ -1,98 +1,219 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Gestão Financeira — Back-end
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API do sistema de gestão financeira da Clínica Rebeca Vaz. O back-end armazena categorias, serviços, formas de pagamento, entradas e saídas, disponibilizando esses dados para o front-end e para os relatórios financeiros.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+A API é executada por padrão em `http://localhost:3000` e utiliza PostgreSQL como banco de dados.
 
-## Description
+## Funcionalidades
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Cadastro, consulta, alteração e remoção de categorias;
+- cadastro, consulta, alteração e remoção de serviços;
+- associação de serviços a categorias;
+- cadastro e gerenciamento de formas de pagamento;
+- registro e gerenciamento de entradas;
+- registro e gerenciamento de saídas;
+- persistência dos dados no PostgreSQL;
+- acesso ao banco com Prisma ORM;
+- CORS habilitado para o front-end local.
 
-## Project setup
+## Tecnologias
 
-```bash
-$ npm install
+- Node.js;
+- NestJS 11;
+- TypeScript;
+- PostgreSQL;
+- Prisma ORM 7;
+- adapter PostgreSQL do Prisma;
+- Jest para testes.
+
+## Pré-requisitos
+
+Antes de iniciar, instale:
+
+- Node.js 20 ou superior;
+- npm ou pnpm;
+- PostgreSQL 15 ou superior, ou Docker para executar o banco em contêiner.
+
+## Configuração do banco de dados
+
+Crie um arquivo `.env` na raiz deste projeto:
+
+```env
+DATABASE_URL="postgresql://admin:admin_password@localhost:5432/clinica_db?schema=public"
+PORT=3000
 ```
 
-## Compile and run the project
+Se estiver usando outro usuário, senha, porta ou nome de banco, ajuste a `DATABASE_URL`.
+
+### Opção 1: PostgreSQL com Docker
+
+O arquivo `docker-compose.yml` deste diretório inicia um PostgreSQL 15 já configurado para os valores mostrados acima.
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+docker compose up -d postgres
 ```
 
-## Run tests
+Para verificar se o contêiner está ativo:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+docker compose ps
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Para encerrar o banco:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+docker compose down
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Opção 2: PostgreSQL instalado na máquina
 
-## Resources
+Crie um banco chamado `clinica_db` e defina na `DATABASE_URL` um usuário que tenha permissão para criar e alterar tabelas nesse banco.
 
-Check out a few resources that may come in handy when working with NestJS:
+## Como executar
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Instale as dependências:
 
-## Support
+```bash
+npm install
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Gere o cliente do Prisma:
 
-## Stay in touch
+```bash
+npx prisma generate
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Aplique as migrações no banco:
 
-## License
+```bash
+npx prisma migrate deploy
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Inicie a API em modo de desenvolvimento:
+
+```bash
+npm run start:dev
+```
+
+A API ficará disponível em [http://localhost:3000](http://localhost:3000). Uma requisição `GET /` deve retornar `Hello World!`.
+
+Com pnpm, os comandos equivalentes são:
+
+```bash
+pnpm install
+pnpm exec prisma generate
+pnpm exec prisma migrate deploy
+pnpm start:dev
+```
+
+## Endpoints
+
+Cada recurso possui endpoints REST para cadastro e gerenciamento dos dados.
+
+| Método | Rota | Descrição |
+| --- | --- | --- |
+| `GET` | `/categories` | Lista as categorias |
+| `POST` | `/categories` | Cadastra uma categoria |
+| `GET` | `/categories/:id` | Consulta uma categoria |
+| `PATCH` | `/categories/:id` | Atualiza uma categoria |
+| `DELETE` | `/categories/:id` | Remove uma categoria |
+| `GET` | `/services` | Lista os serviços e suas categorias |
+| `POST` | `/services` | Cadastra um serviço |
+| `GET` | `/services/:id` | Consulta um serviço |
+| `PATCH` | `/services/:id` | Atualiza um serviço |
+| `DELETE` | `/services/:id` | Remove um serviço |
+| `GET` | `/payment-methods` | Lista as formas de pagamento |
+| `POST` | `/payment-methods` | Cadastra uma forma de pagamento |
+| `GET` | `/incomes` | Lista as entradas |
+| `POST` | `/incomes` | Registra uma entrada |
+| `GET` | `/expenses` | Lista as saídas |
+| `POST` | `/expenses` | Registra uma saída |
+
+As rotas de formas de pagamento, entradas e saídas também aceitam consulta por ID, atualização com `PATCH` e remoção com `DELETE` usando `/:id`.
+
+## Exemplos de requisições
+
+Cadastrar uma categoria:
+
+```powershell
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/categories" -ContentType "application/json" -Body '{"name":"Estética Facial"}'
+```
+
+Cadastrar um serviço, usando o ID de uma categoria existente:
+
+```powershell
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/services" -ContentType "application/json" -Body '{"name":"Limpeza de pele","categoryId":1}'
+```
+
+## Modelos de dados
+
+O schema do Prisma possui cinco entidades principais:
+
+- `Category`: categoria usada para organizar serviços;
+- `Service`: serviço vinculado a uma categoria;
+- `PaymentMethod`: forma de pagamento aceita;
+- `Income`: entrada vinculada a um serviço e a uma forma de pagamento;
+- `Expense`: saída com descrição, valor, tipo e data.
+
+O schema está em `prisma/schema.prisma` e as migrações estão em `prisma/migrations/`.
+
+## Scripts disponíveis
+
+| Comando | Descrição |
+| --- | --- |
+| `npm run start` | Inicia a aplicação |
+| `npm run start:dev` | Inicia com recarregamento automático |
+| `npm run build` | Compila o projeto |
+| `npm run start:prod` | Executa a versão compilada |
+| `npm run lint` | Verifica e corrige problemas de lint |
+| `npm run test` | Executa os testes unitários |
+| `npm run test:e2e` | Executa os testes de integração |
+| `npm run test:cov` | Gera o relatório de cobertura |
+
+Para executar em modo de produção:
+
+```bash
+npm run build
+npm run start:prod
+```
+
+## Estrutura principal
+
+```text
+src/
+  categories/       Recurso de categorias
+  services/         Recurso de serviços
+  payment-methods/  Recurso de formas de pagamento
+  incomes/          Recurso de entradas
+  expenses/         Recurso de saídas
+  prisma/            Conexão compartilhada com o banco
+prisma/
+  schema.prisma      Modelos do banco
+  migrations/        Histórico de migrações
+```
+
+## Solução de problemas
+
+### A API inicia, mas não conecta ao banco
+
+Confira se o PostgreSQL está ativo, se o banco existe e se usuário, senha, host e porta da `DATABASE_URL` estão corretos.
+
+### Erro informando que o cliente Prisma não foi gerado
+
+Execute:
+
+```bash
+npx prisma generate
+```
+
+### As tabelas não existem
+
+Aplique as migrações:
+
+```bash
+npx prisma migrate deploy
+```
+
+### A porta 3000 já está em uso
+
+Encerre o processo que usa a porta ou altere `PORT` no arquivo `.env`. Se mudar a porta, atualize também o endereço da API usado pelo front-end.
